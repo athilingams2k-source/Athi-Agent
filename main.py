@@ -35,10 +35,17 @@ from app.reminders.database import (
     get_pending_reminders,
 )
 
-from app.reminders.extractor import extract_reminder
 
 from app.weather.extractor import extract_weather_location
 from app.weather.service import get_weather
+
+from app.news.extractor import (
+    extract_news_topic,
+    summarize_news,
+)
+from app.news.service import get_news
+
+from app.reminders.extractor import extract_reminder
 
 from app.router import detect_intent
 
@@ -378,6 +385,44 @@ async def handle_message(
         )
 
         return
+    
+    if intent == "NEWS":
+        topic = await extract_news_topic(
+            groq_client,
+            user_message,
+        )
+
+        if not topic:
+            topic = "general"
+
+        news_items = await get_news(topic)
+
+        if not news_items:
+            await update.message.reply_text(
+                f"📰 Sorry, I couldn't get the latest news about {topic}."
+            )
+            return
+
+        news_summary = await summarize_news(
+            groq_client,
+            topic,
+            news_items,
+        )
+
+        if not news_summary:
+            await update.message.reply_text(
+                f"📰 I found news about {topic}, "
+                "but I couldn't summarize it right now."
+            )
+            return
+
+        await update.message.reply_text(
+            news_summary
+        )
+
+        return
+    
+    
 
     # -------------------------
     # MEMORY EXTRACTION

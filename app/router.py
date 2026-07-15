@@ -12,6 +12,7 @@ LIST_TASKS
 COMPLETE_TASK
 ADD_REMINDER
 WEATHER
+NEWS
 GENERAL_CHAT
 
 Rules:
@@ -43,6 +44,19 @@ Intent: WEATHER
 
 User: Will it rain in Mumbai?
 Intent: WEATHER
+
+NEWS:
+Use when the user asks for latest news, recent news,
+headlines, updates, or current developments about a topic.
+
+Examples:
+"Latest news"
+"Tell me today's news"
+"What's happening in the news?"
+"Latest AI news"
+"Give me SAP news"
+"Any OpenAI updates?"
+"Latest technology headlines"
 
 ADD_REMINDER:
 The user asks to be reminded and provides a specific time, date, or time duration.
@@ -119,6 +133,7 @@ Do not add punctuation.
         "COMPLETE_TASK",
         "ADD_REMINDER",
         "WEATHER",
+        "NEWS",
         "GENERAL_CHAT",
     }
 
