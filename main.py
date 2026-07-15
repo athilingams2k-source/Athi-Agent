@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from dotenv import load_dotenv
 from groq import AsyncGroq
@@ -36,8 +37,10 @@ from app.reminders.database import (
 
 from app.reminders.extractor import extract_reminder
 
-from app.router import detect_intent
+from app.weather.extractor import extract_weather_location
+from app.weather.service import get_weather
 
+from app.router import detect_intent
 
 
 load_dotenv()
@@ -45,9 +48,11 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
+
 groq_client = AsyncGroq(
     api_key=GROQ_API_KEY
 )
+
 
 conversation_history = {}
 
@@ -137,7 +142,7 @@ async def tasks(
     task_list = "\n".join(task_lines)
 
     await update.message.reply_text(
-        f"📋 Your pending tasks:\n\n"
+        "📋 Your pending tasks:\n\n"
         f"{task_list}"
     )
 
@@ -197,6 +202,10 @@ async def handle_message(
         f"Detected intent: {intent}"
     )
 
+    # -------------------------
+    # REMINDER
+    # -------------------------
+
     if intent == "ADD_REMINDER":
         reminder_data = await extract_reminder(
             groq_client,
@@ -223,7 +232,11 @@ async def handle_message(
             f"🕒 {remind_at}"
         )
 
-        return    
+        return
+
+    # -------------------------
+    # ADD TASK
+    # -------------------------
 
     if intent == "ADD_TASK":
         task = user_message
@@ -268,6 +281,10 @@ async def handle_message(
 
         return
 
+    # -------------------------
+    # COMPLETE TASK
+    # -------------------------
+
     if intent == "COMPLETE_TASK":
         matched_task = find_pending_task(
             user_id,
@@ -291,13 +308,18 @@ async def handle_message(
             await update.message.reply_text(
                 f"✅ Task completed: {task_name}"
             )
+
         else:
             await update.message.reply_text(
                 "❌ I couldn't complete that task."
             )
 
         return
-    
+
+    # -------------------------
+    # LIST TASKS
+    # -------------------------
+
     if intent == "LIST_TASKS":
         pending_tasks = get_pending_tasks(
             user_id
@@ -323,7 +345,43 @@ async def handle_message(
             f"{task_text}"
         )
 
-        return   
+        return
+
+    # -------------------------
+    # WEATHER
+    # -------------------------
+
+    if intent == "WEATHER":
+        location = await extract_weather_location(
+            groq_client,
+            user_message,
+        )
+
+        if not location:
+            await update.message.reply_text(
+                "🌦️ Which city would you like the weather for?"
+            )
+            return
+
+        weather = await get_weather(
+            location
+        )
+
+        if not weather:
+            await update.message.reply_text(
+                f"⚠️ Sorry, I couldn't get the weather for {location}."
+            )
+            return
+
+        await update.message.reply_text(
+            weather
+        )
+
+        return
+
+    # -------------------------
+    # MEMORY EXTRACTION
+    # -------------------------
 
     extracted_memory = await extract_memory(
         groq_client,
@@ -344,6 +402,10 @@ async def handle_message(
         memories
     )
 
+    # -------------------------
+    # SYSTEM PROMPT
+    # -------------------------
+
     system_prompt = f"""
 You are Athi Agent, a personal AI assistant.
 
@@ -356,6 +418,10 @@ Do not claim to remember information that is not listed above.
 
 Be helpful, conversational, and concise.
 """
+
+    # -------------------------
+    # CONVERSATION HISTORY
+    # -------------------------
 
     if user_id not in conversation_history:
         conversation_history[user_id] = []
@@ -377,6 +443,10 @@ Be helpful, conversational, and concise.
     messages.extend(
         conversation_history[user_id]
     )
+
+    # -------------------------
+    # AI RESPONSE
+    # -------------------------
 
     response = (
         await groq_client.chat.completions.create(
@@ -403,11 +473,10 @@ Be helpful, conversational, and concise.
         ai_reply
     )
 
+
 async def check_reminders(
     context: ContextTypes.DEFAULT_TYPE,
 ):
-    from datetime import datetime
-
     current_time = datetime.now()
 
     pending_reminders = get_pending_reminders()
@@ -418,11 +487,13 @@ async def check_reminders(
         reminder,
         remind_at,
     ) in pending_reminders:
+
         try:
             reminder_time = datetime.strptime(
                 remind_at,
                 "%Y-%m-%d %H:%M:%S",
             )
+
         except ValueError:
             print(
                 f"Invalid reminder time: {remind_at}"
@@ -430,13 +501,16 @@ async def check_reminders(
             continue
 
         if reminder_time <= current_time:
+
             try:
                 await context.bot.send_message(
                     chat_id=user_id,
                     text=f"⏰ Reminder: {reminder}",
                 )
 
-                complete_reminder(reminder_id)
+                complete_reminder(
+                    reminder_id
+                )
 
                 print(
                     f"Reminder sent: {reminder}"
@@ -445,7 +519,7 @@ async def check_reminders(
             except Exception as error:
                 print(
                     f"Reminder send failed: {error}"
-                )    
+                )
 
 
 def main():

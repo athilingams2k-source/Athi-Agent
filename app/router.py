@@ -11,9 +11,38 @@ ADD_TASK
 LIST_TASKS
 COMPLETE_TASK
 ADD_REMINDER
+WEATHER
 GENERAL_CHAT
 
 Rules:
+
+WEATHER:
+The user is asking about weather, temperature, rain, climate conditions,
+humidity, wind, or current weather conditions for a city or place.
+
+Examples:
+- What's the weather in Bangalore?
+- How is the weather in Chennai?
+- Temperature in Hyderabad
+- Is it raining in Mumbai?
+- Weather at Marathahalli
+- Will it rain in Bangalore?
+- How hot is Delhi?
+
+User: What's the weather in Bangalore?
+Intent: WEATHER
+
+User: Is it raining in Chennai?
+Intent: WEATHER
+
+User: Temperature in Hyderabad
+Intent: WEATHER
+
+User: How hot is Delhi?
+Intent: WEATHER
+
+User: Will it rain in Mumbai?
+Intent: WEATHER
 
 ADD_REMINDER:
 The user asks to be reminded and provides a specific time, date, or time duration.
@@ -89,6 +118,7 @@ Do not add punctuation.
         "LIST_TASKS",
         "COMPLETE_TASK",
         "ADD_REMINDER",
+        "WEATHER",
         "GENERAL_CHAT",
     }
 
