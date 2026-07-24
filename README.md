@@ -2,209 +2,284 @@
 
 Athi-Agent is an AI-powered personal productivity assistant built with Python and Telegram.
 
-The assistant is designed to understand natural language, remember useful information, manage tasks, and send scheduled reminders through Telegram.
+It understands natural language, manages tasks, stores useful information, creates reminders, and provides intelligent assistance through a conversational interface.
 
-The long-term goal is to build a modular personal AI assistant that can help users manage daily activities, information, and productivity from a single conversational interface.
+The project is designed with a modular architecture, making it easy to extend with additional AI-powered capabilities such as weather updates, news summaries, voice interaction, web search, and more.
 
-## ✨ Features
+---
 
-### 🧠 AI Memory
+# ✨ Features
 
-Athi-Agent can extract and store useful information from conversations.
+## 🧠 AI Memory
+
+Store useful user preferences and information during conversations.
 
 Examples:
 
-- "I prefer hybrid jobs"
-- "I am learning SAP RAP"
-- "I like Python"
+- "I prefer remote work."
+- "I enjoy learning Python."
+- "My favorite programming language is Java."
 
-The assistant can recall stored information during future conversations.
+The assistant can recall this information in future conversations.
 
 Example:
 
-> User: What type of jobs do I prefer?
+> User: What programming language do I like?
 
-> Athi-Agent: You prefer hybrid jobs.
+> Athi-Agent: You enjoy learning Python.
 
-### 📋 Task Management
+---
 
-Users can create tasks using natural language.
+## 📋 Task Management
+
+Create and manage tasks using natural language.
 
 Examples:
 
-- "Add practice OData to my tasks"
-- "Remind me to practice AMDP"
-- "I need to practice CDS Views"
+- "Add grocery shopping to my tasks."
+- "I need to finish my assignment."
+- "Create a task to call John."
 
-Users can view pending tasks by asking:
+View pending tasks:
 
 - "What are my tasks?"
-- "What do I need to do?"
+- "Show my to-do list."
 
-Tasks can also be completed naturally.
+Complete tasks naturally.
 
 Example:
 
-> User: I finished AMDP
+> User: I finished grocery shopping.
 
-> Athi-Agent: Task completed: practice AMDP
+> Athi-Agent: Task completed: grocery shopping.
 
-### ⏰ Smart Reminders
+---
 
-Athi-Agent supports scheduled Telegram reminders.
+## ⏰ Smart Reminders
 
-Relative time reminders:
+Create reminders using conversational language.
 
-> Remind me in 1 minute to drink water
+Relative reminders
 
-Clock-based reminders:
+> Remind me in 30 minutes to drink water.
 
-> Remind me to practice RAP at 10 PM
+Time-based reminders
 
-When the reminder time is reached, Athi-Agent automatically sends a Telegram notification.
+> Remind me to join the meeting at 3 PM.
 
-### 🤖 AI Intent Detection
+Scheduled reminders are automatically delivered through Telegram.
 
-Athi-Agent uses AI-based intent detection to understand user requests.
+---
 
-Currently supported intents:
+## 🌤️ Weather Updates
 
-- `ADD_TASK`
-- `LIST_TASKS`
-- `COMPLETE_TASK`
-- `ADD_REMINDER`
-- `CHAT`
+Get real-time weather information for any city.
 
-This allows users to interact with the assistant using normal conversational language instead of relying only on commands.
+Examples:
 
-## 🏗️ Project Structure
+- "What's the weather today?"
+- "Weather in London"
+- "Will it rain in Chennai?"
+
+The assistant returns current weather conditions including:
+
+- Temperature
+- Feels like
+- Humidity
+- Wind speed
+- Weather condition
+
+---
+
+## 📰 AI News Summaries
+
+Get concise AI-generated summaries of the latest news.
+
+Examples:
+
+- "Latest AI news"
+- "News about OpenAI"
+- "Technology news"
+
+Instead of returning only links, Athi-Agent summarizes the latest headlines into an easy-to-read briefing.
+
+---
+
+## 🤖 AI Intent Detection
+
+The assistant automatically understands user intent without requiring predefined commands.
+
+Supported intents include:
+
+- Memory Management
+- Task Creation
+- Task Listing
+- Task Completion
+- Reminder Creation
+- Weather Requests
+- News Requests
+- General Conversation
+
+---
+
+# 🏗️ Project Structure
 
 ```text
 Athi-Agent/
 │
 ├── app/
 │   ├── memory/
-│   │   ├── __init__.py
-│   │   ├── database.py
-│   │   └── extractor.py
-│   │
 │   ├── reminders/
-│   │   ├── __init__.py
-│   │   ├── database.py
-│   │   └── extractor.py
-│   │
 │   ├── tasks/
-│   │   ├── __init__.py
-│   │   └── database.py
-│   │
-│   ├── __init__.py
-│   └── router.py
+│   ├── weather/
+│   ├── news/
+│   ├── router.py
+│   └── __init__.py
 │
 ├── main.py
 ├── requirements.txt
-├── .gitignore
-└── README.md
+├── README.md
+└── .gitignore
+```
 
-🛠️ Technology Stack
-Python
-Telegram Bot API
-python-telegram-bot
-Groq API
-SQLite
-APScheduler
-python-dotenv
-⚙️ Installation
+---
 
-Clone the repository:
+# 🛠️ Technology Stack
+
+- Python
+- Telegram Bot API
+- python-telegram-bot
+- Groq API
+- SQLite
+- APScheduler
+- HTTPX
+- Python Dotenv
+
+---
+
+# ⚙️ Installation
+
+Clone the repository
+
+```bash
 git clone https://github.com/athilingams2k-source/Athi-Agent.git
+```
 
-Navigate to the project directory:
+Navigate into the project
+
+```bash
 cd Athi-Agent
+```
 
-Create a virtual environment:
+Create a virtual environment
+
+```bash
 python -m venv .venv
+```
 
-Activate the virtual environment.
+Activate it
 
-Windows:
+Windows
+
+```bash
 .venv\Scripts\activate
+```
 
-Install dependencies:
+Install dependencies
 
+```bash
 pip install -r requirements.txt
+```
 
-🔐 Environment Variables
+---
 
-Create a .env file in the project root.
+# 🔐 Environment Variables
 
-Add:
+Create a `.env` file.
+
+```text
 BOT_TOKEN=your_telegram_bot_token
 GROQ_API_KEY=your_groq_api_key
+```
 
-The .env file is excluded from Git using .gitignore.
+Never commit secrets to Git.
 
-Never commit API keys or bot tokens to the repository.
+---
 
-▶️ Running Athi-Agent
+# ▶️ Running Athi-Agent
 
-Start the bot:
+```bash
 python main.py
+```
 
-Expected terminal output:
+Expected output
 
+```text
 Athi Agent is running...
+```
 
-Open Telegram and start chatting with the configured bot.
+Start chatting with your Telegram bot.
 
-🗺️ Roadmap
+---
 
-Planned modules include:
+# 🚀 Roadmap
 
-Voice assistant
-Web search
-Weather updates
-News summaries
-Email integration
-Telegram message assistance
-Personal daily planning
-Recurring reminders
-Advanced long-term memory
-Personal AI dashboard
-🔒 Security
+Planned capabilities include:
 
-Sensitive local files are excluded from version control.
+- Voice Assistant
+- Text-to-Speech
+- Speech-to-Text
+- Web Search
+- Email Integration
+- Calendar Management
+- Daily Planner
+- Recurring Reminders
+- Long-term AI Memory
+- Document Understanding
+- Personal Knowledge Base
+- AI Dashboard
+- Multi-language Support
 
-Examples:
+---
 
+# 🔒 Security
+
+The following files are excluded from version control:
+
+```text
 .env
 .venv/
 *.db
 __pycache__/
+```
 
-API keys and Telegram bot tokens must never be stored directly in source code.
+Sensitive credentials should always remain outside the repository.
 
-📌 Project Status
+---
 
-Athi-Agent is currently under active development.
+# 📌 Project Status
 
-Completed modules:
+The project is under active development.
 
-AI conversation
-AI memory
-Task management
-Natural language task completion
-Smart reminder creation
-Automatic Telegram reminder delivery
-AI intent routing
+### ✅ Current Features
 
-More productivity and personal assistant capabilities will be added incrementally.
+- AI Chat
+- AI Memory
+- Task Management
+- Reminder Scheduling
+- Weather Information
+- AI News Summaries
+- Intent Detection
+- Telegram Integration
 
-👨‍💻 Developer
+More modules will be added over time.
 
-Athilingam S
+---
 
-Building Athi-Agent as a modular AI-powered personal productivity assistant.
+# 🤝 Contributing
 
-📄 License
+Contributions, ideas, and feature requests are welcome.
 
-This project is currently intended for learning, experimentation, and personal development.
+Feel free to fork the repository, open issues, or submit pull requests.
+
+---
